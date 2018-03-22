@@ -6,26 +6,14 @@ using System.Threading.Tasks;
 
 namespace YourMusicDatabase.Model
 {
+    public enum Genre { Blues, Country, Electronic, Folk, HipHop, Jazz, Pop, Rock, Soul, Other }
+
     public class MusicAlbumsModel
     {
-        public int AlbumID { get; set; }
         public string Artist { get; set; }
-        public string Title { get; set; }
-        public DateTime PublicationDate { get; set; }
+        public string AlbumTitle { get; set; }
         public Genre AlbumGenre { get; set; }
-
-    }
-    public enum Genre
-    {
-        Other,
-        Blues,
-	    Country,            
-	    Electronic,
-	    Folk,
-	    HipHop,
-	    Jazz,	    
-	    Pop,
-	    Soul,
-	    Rock
+        public DateTime ReleaseDate { get; set; }
+        public DateTime AddedDate { get; set; }
     }
 }
