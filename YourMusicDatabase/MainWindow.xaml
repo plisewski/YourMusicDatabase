@@ -6,16 +6,12 @@
         xmlns:local="clr-namespace:YourMusicDatabase"
         xmlns:VM="clr-namespace:YourMusicDatabase.ViewModel"        
         mc:Ignorable="d"
-        Title="Your Music Databse" Height="415" Width="615" ResizeMode="NoResize">
+        Title="Your Music Databse" Height="480" Width="640" ResizeMode="NoResize" Icon="music_library.ico">
     <Window.DataContext>
-        <VM:MusicAlbumsViewModel/>
+        <VM:MusicAlbumViewModel/>
     </Window.DataContext>
-    <Border Width="575"
-            Height="350"            
-            BorderBrush="Black"
-            BorderThickness="1"
-            CornerRadius="20">
-        <Grid Width="550" Height="325">
+    <GroupBox Width="620" Height="435" BorderBrush="Black" BorderThickness="1" Header="Perform CRUD operations on your Music Database">
+        <Grid Width="590" Height="390">
             <TabControl>
                 <TabItem Header="Create">
                     <Grid>
@@ -26,18 +22,18 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="0.35*"/>
+                            <RowDefinition Height="0.3*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Artist:" Margin="10,10,0,0"/>
                         <TextBox x:Name="Artist" Margin="10,30,10,10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
-                                 Text="{Binding Artist, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Text="Genre:" Margin="10,10,0,0" Grid.Column="1"/>
-                        <ComboBox Margin="10,30,10,70" Grid.Column="1" SelectedItem="{Binding AlbumGenre}" ItemsSource="{Binding GenreValues}"/>
+                                 Text="{Binding Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="Album Title:" Margin="10,10,0,0" Grid.Row="1"/>
-                        <TextBox x:Name="Title" Margin="10,30,10,10" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
-                                 Text="{Binding AlbumTitle, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox x:Name="AlbumTitle" Margin="10,30,10,10" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding AlbumTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Genre:" Margin="10,10,0,0" Grid.Column="1"/>
+                        <ComboBox Margin="10,30,10,100" Grid.Column="1" SelectedItem="{Binding AlbumGenre}" ItemsSource="{Binding GenreValues}"/>
                         <TextBlock Text="Release Date:" Margin="10,10,0,0" Grid.Column="1" Grid.Row="1" />
-                        <DatePicker Margin="10,30,10,70" Grid.Row="1" Grid.Column="1"
+                        <DatePicker Margin="10,30,10,100" Grid.Row="1" Grid.Column="1"
                                    SelectedDate="{Binding ReleaseDate, Mode=OneWayToSource}"/>
                         <Button Content="Create" Margin="10,10,150,10" Grid.Row="3"
                                 Command="{Binding Create}"/>
@@ -45,21 +41,84 @@
                 </TabItem>
                 <TabItem Header="Read">
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="61*"/>
+                            <ColumnDefinition Width="211*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
-                            <RowDefinition Height="0.35*"/>
+                            <RowDefinition Height="0.3*"/>
                         </Grid.RowDefinitions>
-                        <DataGrid Margin="10" x:Name="ViewDataGrid" IsReadOnly="True" GridLinesVisibility="Horizontal">
+                        <DataGrid Margin="10" AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All" 
+                                  HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" ColumnWidth="*" CanUserAddRows="False"
+                                  ItemsSource="{Binding MusicAlbumsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2">
                             <DataGrid.Columns>
+                                <DataGridTextColumn Header="Artist" Binding="{Binding Artist}" />
+                                <DataGridTextColumn Header="Album Title" Binding="{Binding AlbumTitle}" />
+                                <DataGridTextColumn Header="Album Genre" Binding="{Binding AlbumGenre}" />
+                                <DataGridTextColumn Header="Release Date" Binding="{Binding ReleaseDate, StringFormat=\{0:dd.MM.yyyy\}}" />
+                                <DataGridTextColumn Header="Added Date" Binding="{Binding AddedDate, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button Content="Read" Margin="10,10,422.5,10" Grid.Row="1"/>
+                        <Button Content="Read" Margin="10,10,0,10" Grid.Row="1"
+                                Command="{Binding Read}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Update/Delete">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.85*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="0.6*"/>
+                        </Grid.RowDefinitions>
+
+                        <ListView ItemsSource="{Binding MusicAlbumsListUpdated}"
+                                  SelectedIndex="{Binding SelectedAlbumIndex}"
+                                  IsSynchronizedWithCurrentItem="True"
+                                  IsManipulationEnabled="False"
+                                  Grid.RowSpan="4"
+                                  HorizontalAlignment="Stretch"
+                                  Margin="10">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="90"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding AlbumTitle}" Header="Album Title" Width="90"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                        <TextBlock Text="Artist:" Margin="10" Grid.Column="1" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="ArtistEdit" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Column="2"
+                                 Text="{Binding MusicAlbumsListUpdated/Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Text="Album Title:" Margin="10" Grid.Column="1" Grid.Row="1" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="AlbumTitleEdit" Margin="10" Grid.Column="2" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                                 Text="{Binding MusicAlbumsListUpdated/AlbumTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Text="Genre:" Margin="10" Grid.Column="1" Grid.Row="2" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <ComboBox Margin="10,25" Grid.Column="2" Grid.Row="2" 
+                                  SelectedItem="{Binding MusicAlbumsListUpdated/AlbumGenre, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding GenreValues, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Text="Release Date:" Margin="10" Grid.Column="1" Grid.Row="3" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <DatePicker Margin="10,25" Grid.Column="2" Grid.Row="3" 
+                                    SelectedDate="{Binding MusicAlbumsListUpdated/ReleaseDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Content="Load List/Read" Grid.Row="4" Margin="10,10,75,10"
+                                Command="{Binding Read}"/>
+                        <Button Content="Update/Save" Grid.Row="5" Grid.Column="2" Margin="10,10,120,10"
+                                Command="{Binding Update}"/>
+                        <Button Content="Delete" Grid.Row="5" Grid.Column="2" Margin="120,10,10,10"
+                                Command="{Binding Delete}"/>
+                    </Grid>
 
                 </TabItem>
             </TabControl>
         </Grid>
-    </Border>
+    </GroupBox>
 </Window>

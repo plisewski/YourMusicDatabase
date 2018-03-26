@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MusicAlbums>
+  <MusicAlbum>
+    <Artist>artist1</Artist>
+    <AlbumTitle>album1</AlbumTitle>
+    <AlbumGenre>Blues</AlbumGenre>
+    <ReleaseDate>2009-12-14T00:00:00</ReleaseDate>
+    <AddedDate>2018-03-26T15:36:22.6179722+02:00</AddedDate>
+  </MusicAlbum>
+  <MusicAlbum>
+    <Artist>artist2</Artist>
+    <AlbumTitle>album2</AlbumTitle>
+    <AlbumGenre>Country</AlbumGenre>
+    <ReleaseDate>2012-03-10T00:00:00</ReleaseDate>
+    <AddedDate>2018-03-26T15:36:42.007192+02:00</AddedDate>
+  </MusicAlbum>
+  <MusicAlbum>
+    <Artist>artist3</Artist>
+    <AlbumTitle>album3</AlbumTitle>
+    <AlbumGenre>Electronic</AlbumGenre>
+    <ReleaseDate>2014-01-14T00:00:00</ReleaseDate>
+    <AddedDate>2018-03-26T22:45:08.4907975+02:00</AddedDate>
+  </MusicAlbum>
+  <MusicAlbum>
+    <Artist>artist4</Artist>
+    <AlbumTitle>album4</AlbumTitle>
+    <AlbumGenre>Folk</AlbumGenre>
+    <ReleaseDate>2016-08-12T00:00:00</ReleaseDate>
+    <AddedDate>2018-03-26T22:45:20.4526969+02:00</AddedDate>
+  </MusicAlbum>
+</MusicAlbums>
