@@ -42,8 +42,8 @@
                 <TabItem Header="Read">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="61*"/>
-                            <ColumnDefinition Width="211*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2*"/>
@@ -60,16 +60,17 @@
                                 <DataGridTextColumn Header="Added Date" Binding="{Binding AddedDate, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button Content="Read" Margin="10,10,0,10" Grid.Row="1"
+                        <Button Content="Read" Margin="10,10,150,10" Grid.Row="1"
                                 Command="{Binding Read}"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Update/Delete">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.85*"/>
-                            <ColumnDefinition Width="0.5*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="61*"/>
+                            <ColumnDefinition Width="150*"/>
+                            <ColumnDefinition Width="124*"/>
+                            <ColumnDefinition Width="249*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -85,7 +86,7 @@
                                   IsManipulationEnabled="False"
                                   Grid.RowSpan="4"
                                   HorizontalAlignment="Stretch"
-                                  Margin="10">
+                                  Margin="10" Grid.ColumnSpan="2">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="90"/>
@@ -94,26 +95,26 @@
                             </ListView.View>
                         </ListView>
 
-                        <TextBlock Text="Artist:" Margin="10" Grid.Column="1" TextAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="ArtistEdit" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Column="2"
+                        <TextBlock Text="Artist:" Margin="10,32,10,31" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="ArtistEdit" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Column="3"
                                  Text="{Binding MusicAlbumsListUpdated/Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                        <TextBlock Text="Album Title:" Margin="10" Grid.Column="1" Grid.Row="1" TextAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="AlbumTitleEdit" Margin="10" Grid.Column="2" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                        <TextBlock Text="Album Title:" Margin="10,32,10,31" Grid.Column="2" Grid.Row="1" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="AlbumTitleEdit" Margin="10" Grid.Column="3" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                                  Text="{Binding MusicAlbumsListUpdated/AlbumTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                        <TextBlock Text="Genre:" Margin="10" Grid.Column="1" Grid.Row="2" TextAlignment="Right" VerticalAlignment="Center"/>
-                        <ComboBox Margin="10,25" Grid.Column="2" Grid.Row="2" 
+                        <TextBlock Text="Genre:" Margin="10,31" Grid.Column="2" Grid.Row="2" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <ComboBox Margin="10,25" Grid.Column="3" Grid.Row="2" 
                                   SelectedItem="{Binding MusicAlbumsListUpdated/AlbumGenre, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding GenreValues, UpdateSourceTrigger=PropertyChanged}"/>
 
-                        <TextBlock Text="Release Date:" Margin="10" Grid.Column="1" Grid.Row="3" TextAlignment="Right" VerticalAlignment="Center"/>
-                        <DatePicker Margin="10,25" Grid.Column="2" Grid.Row="3" 
+                        <TextBlock Text="Release Date:" Margin="10,32,10,31" Grid.Column="2" Grid.Row="3" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <DatePicker Margin="10,25" Grid.Column="3" Grid.Row="3" 
                                     SelectedDate="{Binding MusicAlbumsListUpdated/ReleaseDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <Button Content="Load List/Read" Grid.Row="4" Margin="10,10,75,10"
-                                Command="{Binding Read}"/>
-                        <Button Content="Update/Save" Grid.Row="5" Grid.Column="2" Margin="10,10,120,10"
+                        <Button Content="Load List/Read" Grid.Row="4" Margin="10,10,69,10"
+                                Command="{Binding Read}" Grid.ColumnSpan="2"/>
+                        <Button Content="Update/Save" Grid.Row="4" Grid.Column="3" Margin="10,10,120,10"
                                 Command="{Binding Update}"/>
-                        <Button Content="Delete" Grid.Row="5" Grid.Column="2" Margin="120,10,10,10"
+                        <Button Content="Delete" Grid.Row="4" Grid.Column="3" Margin="120,10,10,10"
                                 Command="{Binding Delete}"/>
                     </Grid>
 

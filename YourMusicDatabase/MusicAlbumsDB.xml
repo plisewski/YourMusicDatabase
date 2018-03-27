@@ -28,4 +28,11 @@
     <ReleaseDate>2016-08-12T00:00:00</ReleaseDate>
     <AddedDate>2018-03-26T22:45:20.4526969+02:00</AddedDate>
   </MusicAlbum>
+  <MusicAlbum>
+    <Artist>artistN</Artist>
+    <AlbumTitle>albumN</AlbumTitle>
+    <AlbumGenre>Other</AlbumGenre>
+    <ReleaseDate>2018-01-01T00:00:00</ReleaseDate>
+    <AddedDate>2018-03-27T09:33:23.0082358+02:00</AddedDate>
+  </MusicAlbum>
 </MusicAlbums>
