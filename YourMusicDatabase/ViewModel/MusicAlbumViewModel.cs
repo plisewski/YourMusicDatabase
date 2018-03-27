@@ -226,6 +226,9 @@ namespace YourMusicDatabase.ViewModel
                     _delete = new RelayCommand(
                         p =>
                         {
+                            if (MessageBox.Show("Are you sure?", "Message", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+                                return; 
+                                
                             int selectedAlbumIndex = (int)_selectedAlbumIndex;
 
                             string artistToDelete = musicAlbumsList[selectedAlbumIndex].Artist;
