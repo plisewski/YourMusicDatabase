@@ -21,6 +21,7 @@ namespace YourMusicDatabase.ViewModel
         private const string FilePath = "../../MusicAlbumsDB.xml";
         private List<MusicAlbumModel> _musicAlbumsList = new List<MusicAlbumModel>();
         private List<MusicAlbumModel> _musicAlbumsListUpdated = new List<MusicAlbumModel>();
+
         private int? _selectedAlbumIndex;
 
         #endregion
