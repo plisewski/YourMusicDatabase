@@ -2,13 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
-        xmlns:local="clr-namespace:YourMusicDatabase"
-        xmlns:VM="clr-namespace:YourMusicDatabase.ViewModel"        
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:YourMusicDatabase.ViewModel"        
         mc:Ignorable="d"
         Title="Your Music Databse" Height="480" Width="640" ResizeMode="NoResize" Icon="music_library.ico">
     <Window.DataContext>
-        <VM:MusicAlbumViewModel/>
+        <vm:MusicAlbumViewModel/>
     </Window.DataContext>
     <GroupBox Width="620" Height="435" BorderBrush="Black" BorderThickness="1" Header="Perform CRUD operations on your Music Database">
         <Grid Width="590" Height="390">
@@ -25,17 +24,17 @@
                             <RowDefinition Height="0.3*"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Artist:" Margin="10,10,0,0"/>
-                        <TextBox x:Name="Artist" Margin="10,30,10,10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                        <TextBox Grid.Row="0" Grid.Column="0" x:Name="Artist" Margin="10,30,10,10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                                  Text="{Binding Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Text="Album Title:" Margin="10,10,0,0" Grid.Row="1"/>
-                        <TextBox x:Name="AlbumTitle" Margin="10,30,10,10" Grid.Row="1" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                        <TextBlock Text="Album Title:" Margin="10,10,0,0" Grid.Row="1" Grid.Column="0" />
+                        <TextBox x:Name="AlbumTitle" Margin="10,30,10,10" Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
                                  Text="{Binding AlbumTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Text="Genre:" Margin="10,10,0,0" Grid.Column="1"/>
-                        <ComboBox Margin="10,30,10,100" Grid.Column="1" SelectedItem="{Binding AlbumGenre}" ItemsSource="{Binding GenreValues}"/>
+                        <TextBlock Text="Genre:" Margin="10,10,0,0" Grid.Row="0" Grid.Column="1"/>
+                        <ComboBox Margin="10,30,10,100" Grid.Row="0" Grid.Column="1" SelectedItem="{Binding AlbumGenre}" ItemsSource="{Binding GenreValues}"/>
                         <TextBlock Text="Release Date:" Margin="10,10,0,0" Grid.Column="1" Grid.Row="1" />
                         <DatePicker Margin="10,30,10,100" Grid.Row="1" Grid.Column="1"
                                    SelectedDate="{Binding ReleaseDate, Mode=OneWayToSource}"/>
-                        <Button Content="Create" Margin="10,10,150,10" Grid.Row="3"
+                        <Button Content="Create" Margin="10,10,150,10" Grid.Row="2" Grid.Column="0"
                                 Command="{Binding Create}"/>
                     </Grid>
                 </TabItem>
@@ -60,7 +59,7 @@
                                 <DataGridTextColumn Header="Added Date" Binding="{Binding AddedDate, StringFormat=\{0:dd.MM.yyyy HH:mm\}}" />
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button Content="Read" Margin="10,10,150,10" Grid.Row="1"
+                        <Button Content="Read" Margin="10,10,150,10" Grid.Row="1" Grid.Column="0"
                                 Command="{Binding Read}"/>
                     </Grid>
                 </TabItem>
@@ -95,8 +94,9 @@
                             </ListView.View>
                         </ListView>
 
-                        <TextBlock Text="Artist:" Margin="10,32,10,31" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center"/>
-                        <TextBox x:Name="ArtistEdit" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Column="3"
+                        <TextBlock Text="Artist:" Margin="10,32,10,31" Grid.Row="0" Grid.Column="2" TextAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBox x:Name="ArtistEdit" Margin="10" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                                 Grid.Row="0" Grid.Column="3"
                                  Text="{Binding MusicAlbumsListUpdated/Artist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <TextBlock Text="Album Title:" Margin="10,32,10,31" Grid.Column="2" Grid.Row="1" TextAlignment="Right" VerticalAlignment="Center"/>
@@ -111,7 +111,7 @@
                         <DatePicker Margin="10,25" Grid.Column="3" Grid.Row="3" 
                                     SelectedDate="{Binding MusicAlbumsListUpdated/ReleaseDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                         <Button Content="Load List/Read" Grid.Row="4" Margin="10,10,69,10"
-                                Command="{Binding Read}" Grid.ColumnSpan="2"/>
+                                Command="{Binding Read}" Grid.ColumnSpan="2" Grid.Column="0" />
                         <Button Content="Update/Save" Grid.Row="4" Grid.Column="3" Margin="10,10,120,10"
                                 Command="{Binding Update}"/>
                         <Button Content="Delete" Grid.Row="4" Grid.Column="3" Margin="120,10,10,10"
