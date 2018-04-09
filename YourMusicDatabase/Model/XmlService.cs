@@ -13,15 +13,15 @@ namespace YourMusicDatabase.Model
         {
             try
             {
-                XDocument xml = XDocument.Load(filePath);
-                XElement album = new XElement("MusicAlbum",
+                var xml = XDocument.Load(filePath);
+                var album = new XElement("MusicAlbum",
                         new XElement("Artist", musicAlbum.Artist),
                         new XElement("AlbumTitle", musicAlbum.AlbumTitle),
                         new XElement("AlbumGenre", musicAlbum.AlbumGenre),
                         new XElement("ReleaseDate", musicAlbum.ReleaseDate),
                         new XElement("AddedDate", musicAlbum.AddedDate)
                 );
-                xml.Root.Add(album);
+                xml.Root?.Add(album);
                 xml.Save(filePath);
             }
             catch (FileLoadException ex)
@@ -39,19 +39,17 @@ namespace YourMusicDatabase.Model
         {
             try
             {
-                XDocument xml = XDocument.Load(filePath);
+                var xml = XDocument.Load(filePath);
 
-                List<MusicAlbumModel> musicAlbumsModelList;
-
-                return musicAlbumsModelList = (from e in xml.Root.Elements("MusicAlbum")
-                                               select new MusicAlbumModel
-                                               {
-                                                   Artist = e.Element("Artist").Value,
-                                                   AlbumTitle = e.Element("AlbumTitle").Value,
-                                                   AlbumGenre = MusicAlbumModel.ParseGenre(e.Element("AlbumGenre").Value),
-                                                   ReleaseDate = DateTime.Parse(e.Element("ReleaseDate").Value),
-                                                   AddedDate = DateTime.Parse(e.Element("AddedDate").Value)
-                                               }).ToList();
+                return (xml.Root?.Elements("MusicAlbum")
+                            .Select(e => new MusicAlbumModel
+                            {
+                                Artist = e.Element("Artist")?.Value,
+                                AlbumTitle = e.Element("AlbumTitle")?.Value,
+                                AlbumGenre = MusicAlbumModel.ParseGenre(e.Element("AlbumGenre")?.Value),
+                                ReleaseDate = DateTime.Parse(e.Element("ReleaseDate")?.Value),
+                                AddedDate = DateTime.Parse(e.Element("AddedDate")?.Value)
+                            }) ?? throw new InvalidOperationException()).ToList();
             }
             catch (FileLoadException ex)
             {
@@ -66,8 +64,8 @@ namespace YourMusicDatabase.Model
         // Update
         public static void Update(string filePath, string artist, string albumTitle, string newArtist, string newAlbumTitle, Genre newAlbumGenre, DateTime newReleaseDate)
         {
-            XDocument xml = XDocument.Load(filePath);            
-            var album = xml.Descendants("MusicAlbum").Single(x => (x.Element("Artist").Value.Equals(artist) && x.Element("AlbumTitle").Value.Equals(albumTitle)));
+            var xml = XDocument.Load(filePath);            
+            var album = xml.Descendants("MusicAlbum").Single(x => x.Element("Artist").Value.Equals(artist) && x.Element("AlbumTitle").Value.Equals(albumTitle));
             album.SetElementValue("Artist", newArtist);
             album.SetElementValue("AlbumTitle", newAlbumTitle);
             album.SetElementValue("AlbumGenre", newAlbumGenre);
@@ -81,8 +79,8 @@ namespace YourMusicDatabase.Model
         // Delete
         public static void Delete(string filePath, string artist, string albumTitle)
         {
-            XDocument xml = XDocument.Load(filePath);            
-            var album = xml.Descendants("MusicAlbum").Single(x => (x.Element("Artist").Value.Equals(artist) && x.Element("AlbumTitle").Value.Equals(albumTitle)));
+            var xml = XDocument.Load(filePath);            
+            var album = xml.Descendants("MusicAlbum").Single(x => x.Element("Artist").Value.Equals(artist) && x.Element("AlbumTitle").Value.Equals(albumTitle));
             album.Remove();
             xml.Save(filePath);
         }

@@ -81,7 +81,7 @@
                         </Grid.RowDefinitions>
 
                         <ListView ItemsSource="{Binding MusicAlbumsListUpdated}"
-                                  SelectedIndex="{Binding SelectedAlbumIndex}"
+                                  SelectedIndex="{Binding SelectedAlbumIndex, UpdateSourceTrigger=PropertyChanged}"
                                   IsSynchronizedWithCurrentItem="True"
                                   IsManipulationEnabled="False"
                                   Grid.RowSpan="4"

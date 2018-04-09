@@ -115,11 +115,7 @@ namespace YourMusicDatabase.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string propName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
+        private void OnPropertyChanged(string propName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
         #endregion
 
@@ -130,23 +126,19 @@ namespace YourMusicDatabase.ViewModel
         {
             get
             {
-                if (_create == null)
-                    _create = new RelayCommand(
-                        p =>
-                        {                            
-                            AddedDate = DateTime.Now;                            
-                            XmlService.Create(FilePath, _albumModel);
-                            MessageBox.Show("Your album has been added!", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
-                            Artist = "";
-                            AlbumTitle = "";
-                            AlbumGenre = Genre.Blues;                         
-                        },
-                        p =>
-                        {
-                            return !string.IsNullOrEmpty(Artist) && !string.IsNullOrEmpty(AlbumTitle) && ReleaseDate < DateTime.Now && ReleaseDate.Year > 1;
-                        }
-                );
-                return _create;
+                return _create ?? (_create = new RelayCommand(
+                           p =>
+                           {
+                               AddedDate = DateTime.Now;
+                               XmlService.Create(FilePath, _albumModel);
+                               MessageBox.Show("Your album has been added!", "Message", MessageBoxButton.OK,
+                                   MessageBoxImage.Information);
+                               Artist = "";
+                               AlbumTitle = "";
+                               AlbumGenre = Genre.Blues;
+                           },
+                           p => !string.IsNullOrEmpty(Artist) && !string.IsNullOrEmpty(AlbumTitle) &&
+                                ReleaseDate < DateTime.Now && ReleaseDate.Year > 1));
             }
         }
 
@@ -155,15 +147,17 @@ namespace YourMusicDatabase.ViewModel
         {
             get
             {
-                if (_read == null)
-                    _read = new RelayCommand(
-                        p =>
-                        {
-                            MusicAlbumsList = XmlService.Read(FilePath);
-                            MusicAlbumsListUpdated = MusicAlbumModel.DeepClone(_musicAlbumsList);
-                        }
-                );
-                return _read;
+                return _read ?? (_read = new RelayCommand(
+                           p =>
+                           {
+                               MusicAlbumsList = XmlService.Read(FilePath);
+                               MusicAlbumsListUpdated = MusicAlbumModel.DeepClone(_musicAlbumsList);
+
+                               if (MusicAlbumsList.Count == 0)
+                                   MessageBox.Show("Your music database is empty. Create some records first!",
+                                       "Message", MessageBoxButton.OK, MessageBoxImage.Information);
+                           }
+                       ));
             }
         }
 
@@ -171,50 +165,54 @@ namespace YourMusicDatabase.ViewModel
         public ICommand Update
         {
             get
-            {                
-                if (_update == null)
-                    _update = new RelayCommand(
-                        p =>
-                        {
-                            if (_selectedAlbumIndex != null)
-                            {
-                                int selectedAlbumIndex = (int)_selectedAlbumIndex;
+            {
+                return _update ?? (_update = new RelayCommand(
+                           p =>
+                           {
+                               if (_selectedAlbumIndex != null)
+                               {
+                                   int selectedAlbumIndex = (int) _selectedAlbumIndex;
 
-                                string artistToUpdate = _musicAlbumsList[selectedAlbumIndex].Artist;
-                                string albumTitleToUpdate = _musicAlbumsList[selectedAlbumIndex].AlbumTitle;
-                                string newArtist = _musicAlbumsListUpdated[selectedAlbumIndex].Artist;
-                                string newAlbumTitle = _musicAlbumsListUpdated[selectedAlbumIndex].AlbumTitle;
-                                Genre newAlbumGenre = _musicAlbumsListUpdated[selectedAlbumIndex].AlbumGenre;
-                                DateTime newReleaseDate = _musicAlbumsListUpdated[selectedAlbumIndex].ReleaseDate;                            
+                                   string artistToUpdate = _musicAlbumsList[selectedAlbumIndex].Artist;
+                                   string albumTitleToUpdate = _musicAlbumsList[selectedAlbumIndex].AlbumTitle;
+                                   string newArtist = _musicAlbumsListUpdated[selectedAlbumIndex].Artist;
+                                   string newAlbumTitle = _musicAlbumsListUpdated[selectedAlbumIndex].AlbumTitle;
+                                   Genre newAlbumGenre = _musicAlbumsListUpdated[selectedAlbumIndex].AlbumGenre;
+                                   DateTime newReleaseDate = _musicAlbumsListUpdated[selectedAlbumIndex].ReleaseDate;
 
-                                if (newReleaseDate > DateTime.Now)
-                                {
-                                    MessageBox.Show("New release date cannot be in future", "Message", MessageBoxButton.OK, MessageBoxImage.Error);
-                                    return;
-                                }                                
+                                   if (newReleaseDate > DateTime.Now)
+                                   {
+                                       MessageBox.Show("New release date cannot be in future", "Message",
+                                           MessageBoxButton.OK, MessageBoxImage.Error);
+                                       return;
+                                   }
 
-                                XmlService.Update(FilePath, artistToUpdate, albumTitleToUpdate, newArtist, newAlbumTitle, newAlbumGenre, newReleaseDate);
-                            }
+                                   XmlService.Update(FilePath, artistToUpdate, albumTitleToUpdate, newArtist,
+                                       newAlbumTitle, newAlbumGenre, newReleaseDate);
+                               }
 
-                            MessageBox.Show("Your album database has been updated!", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
-                            MusicAlbumsList = MusicAlbumModel.DeepClone(_musicAlbumsListUpdated);
-                        },
-                        p =>
-                        {
-                            int selectedAlbumIndex;
+                               MessageBox.Show("Your album database has been updated!", "Message", MessageBoxButton.OK,
+                                   MessageBoxImage.Information);
+                               MusicAlbumsList = MusicAlbumModel.DeepClone(_musicAlbumsListUpdated);
+                           },
+                           p =>
+                           {
+                               if (!_selectedAlbumIndex.HasValue)
+                                   return false;
 
-                            if (!_selectedAlbumIndex.HasValue)
-                                return false;
-                            else
-                                selectedAlbumIndex = (int)_selectedAlbumIndex;
+                               var selectedAlbumIndex = (int) _selectedAlbumIndex;
 
-                            return _selectedAlbumIndex != null && (_musicAlbumsList[selectedAlbumIndex].Artist != _musicAlbumsListUpdated[selectedAlbumIndex].Artist 
-                                || _musicAlbumsList[selectedAlbumIndex].AlbumTitle != _musicAlbumsListUpdated[selectedAlbumIndex].AlbumTitle
-                                || _musicAlbumsList[selectedAlbumIndex].AlbumGenre != _musicAlbumsListUpdated[selectedAlbumIndex].AlbumGenre
-                                || _musicAlbumsList[selectedAlbumIndex].ReleaseDate != _musicAlbumsListUpdated[selectedAlbumIndex].ReleaseDate);
-                        }
-                );
-                return _update;
+                               return _selectedAlbumIndex != null && _selectedAlbumIndex > 0 &&
+                                      (_musicAlbumsList[selectedAlbumIndex].Artist !=
+                                       _musicAlbumsListUpdated[selectedAlbumIndex].Artist
+                                       || _musicAlbumsList[selectedAlbumIndex].AlbumTitle !=
+                                       _musicAlbumsListUpdated[selectedAlbumIndex].AlbumTitle
+                                       || _musicAlbumsList[selectedAlbumIndex].AlbumGenre !=
+                                       _musicAlbumsListUpdated[selectedAlbumIndex].AlbumGenre
+                                       || _musicAlbumsList[selectedAlbumIndex].ReleaseDate !=
+                                       _musicAlbumsListUpdated[selectedAlbumIndex].ReleaseDate);
+                           }
+                       ));
             }
         }
 
@@ -223,33 +221,29 @@ namespace YourMusicDatabase.ViewModel
         {
             get
             {
-                if (_delete == null)
-                    _delete = new RelayCommand(
-                        p =>
-                        {
-                            if (MessageBox.Show("Are you sure?", "Message", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
-                                return;
+                return _delete ?? (_delete = new RelayCommand(
+                           p =>
+                           {
+                               if (MessageBox.Show("Are you sure?", "Message", MessageBoxButton.YesNo,
+                                       MessageBoxImage.Question) == MessageBoxResult.No)
+                                   return;
 
-                            if (_selectedAlbumIndex != null)
-                            {
-                                int selectedAlbumIndex = (int)_selectedAlbumIndex;
+                               if (_selectedAlbumIndex != null)
+                               {
+                                   int selectedAlbumIndex = (int) _selectedAlbumIndex;
 
-                                string artistToDelete = _musicAlbumsList[selectedAlbumIndex].Artist;
-                                string albumTitleToDelete = _musicAlbumsList[selectedAlbumIndex].AlbumTitle;
+                                   string artistToDelete = _musicAlbumsList[selectedAlbumIndex].Artist;
+                                   string albumTitleToDelete = _musicAlbumsList[selectedAlbumIndex].AlbumTitle;
 
-                                XmlService.Delete(FilePath, artistToDelete, albumTitleToDelete);
-                            }
+                                   XmlService.Delete(FilePath, artistToDelete, albumTitleToDelete);
+                               }
 
-                            MessageBox.Show("Your album has been deleted!", "Message", MessageBoxButton.OK, MessageBoxImage.Information);
-                            MusicAlbumsList = XmlService.Read(FilePath);
-                            MusicAlbumsListUpdated = MusicAlbumModel.DeepClone(_musicAlbumsList);                            
-                        },
-                        p =>
-                        {
-                            return _selectedAlbumIndex.HasValue;
-                        }
-                );
-                return _delete;
+                               MessageBox.Show("Your album has been deleted!", "Message", MessageBoxButton.OK,
+                                   MessageBoxImage.Information);
+                               MusicAlbumsList = XmlService.Read(FilePath);
+                               MusicAlbumsListUpdated = MusicAlbumModel.DeepClone(_musicAlbumsList);
+                           },
+                           p => _selectedAlbumIndex.HasValue));
             }
         }
 
