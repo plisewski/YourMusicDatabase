@@ -130,6 +130,20 @@ namespace YourMusicDatabase.ViewModel
                            p =>
                            {
                                AddedDate = DateTime.Now;
+
+                               // checking whether an object already exists
+                               MusicAlbumsList = XmlService.Read(FilePath);
+                               foreach (var item in MusicAlbumsList)
+                               {
+                                   if (item.Artist.Equals(Artist) || item.AlbumTitle.Equals(AlbumTitle))
+                                   {
+                                       MessageBox.Show("Such an album already exists in your database!", "Message", MessageBoxButton.OK,
+                                           MessageBoxImage.Information);
+                                       return;
+                                   }
+                               }
+
+                               // adding an unique album
                                XmlService.Create(FilePath, _albumModel);
                                MessageBox.Show("Your album has been added!", "Message", MessageBoxButton.OK,
                                    MessageBoxImage.Information);

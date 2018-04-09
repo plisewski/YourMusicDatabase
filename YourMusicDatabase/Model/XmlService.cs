@@ -64,8 +64,10 @@ namespace YourMusicDatabase.Model
         // Update
         public static void Update(string filePath, string artist, string albumTitle, string newArtist, string newAlbumTitle, Genre newAlbumGenre, DateTime newReleaseDate)
         {
-            var xml = XDocument.Load(filePath);            
+            var xml = XDocument.Load(filePath);
+
             var album = xml.Descendants("MusicAlbum").Single(x => x.Element("Artist").Value.Equals(artist) && x.Element("AlbumTitle").Value.Equals(albumTitle));
+
             album.SetElementValue("Artist", newArtist);
             album.SetElementValue("AlbumTitle", newAlbumTitle);
             album.SetElementValue("AlbumGenre", newAlbumGenre);
