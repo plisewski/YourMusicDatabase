@@ -20,7 +20,7 @@ namespace YourMusicDatabase.ViewModel
         private MusicAlbumModel albumModel = new MusicAlbumModel();        
         private const string filePath = "../../MusicAlbumsDB.xml";
         private List<MusicAlbumModel> musicAlbumsList = new List<MusicAlbumModel>();
-        private List<MusicAlbumModel> musicAlbumsListUpdated = new List<MusicAlbumModel>();;
+        private List<MusicAlbumModel> musicAlbumsListUpdated = new List<MusicAlbumModel>();
         private int? _selectedAlbumIndex;
 
         #endregion
