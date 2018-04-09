@@ -202,7 +202,7 @@ namespace YourMusicDatabase.ViewModel
 
                                var selectedAlbumIndex = (int) _selectedAlbumIndex;
 
-                               return _selectedAlbumIndex != null && _selectedAlbumIndex > 0 &&
+                               return _selectedAlbumIndex != null && _selectedAlbumIndex >= 0 &&
                                       (_musicAlbumsList[selectedAlbumIndex].Artist !=
                                        _musicAlbumsListUpdated[selectedAlbumIndex].Artist
                                        || _musicAlbumsList[selectedAlbumIndex].AlbumTitle !=

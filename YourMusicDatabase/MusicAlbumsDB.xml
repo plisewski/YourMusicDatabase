@@ -3,7 +3,7 @@
   <MusicAlbum>
     <Artist>123</Artist>
     <AlbumTitle>123</AlbumTitle>
-    <AlbumGenre>Blues</AlbumGenre>
+    <AlbumGenre>Folk</AlbumGenre>
     <ReleaseDate>2018-04-09T00:00:00</ReleaseDate>
     <AddedDate>2018-04-09T12:36:03.499257+02:00</AddedDate>
   </MusicAlbum>
